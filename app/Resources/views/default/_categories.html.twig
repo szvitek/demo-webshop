@@ -1,9 +1,11 @@
 <div class="col-md-3">
-    <p class="lead">Categories</p>
+    <p class="lead">Categories {{ active }}</p>
     <div class="list-group">
         {% if categories is defined and categories|length>0 %}
             {% for category in categories %}
-                <a href="{{ path('category_list', { 'slug': category.slug }) }}" class="list-group-item">{{ category.name }}</a>
+                <a href="{{ path('category_list', { 'slug': category.slug }) }}" class="{{ category.id == active ? 'list-group-item active' : 'list-group-item'}}">
+                    {{ category.name }}
+                </a>
             {% endfor %}
         {% else %}
             :( No categories yet. Please Check back later.

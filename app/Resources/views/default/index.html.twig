@@ -22,7 +22,7 @@
                                 <div class="item">
                             {% endif %}
                                 <img class="slide-image" src="http://placehold.it/800x300" alt="">
-                                <div class="carousel-caption">{{ randomProduct.name }}</div>
+                                <div class="carousel-caption"><a href="{{ path('product_show', { 'id': randomProduct.id }) }}">{{ randomProduct.name }}</a></div>
                             </div>
 
                         {% endfor %}
@@ -47,7 +47,7 @@
                     <img src="http://placehold.it/320x150" alt="">
                     <div class="caption">
                         <h4 class="pull-right">&pound;{{ product.price }}</h4>
-                        <h4><a href="#">{{ product.name }}</a> - {{ product.quantity }}
+                        <h4><a href="{{ path('product_show', {'id':product.id}) }}">{{ product.name }}</a> - {{ product.quantity }}
                         </h4>
                         <p>{{ product.description }}</p>
                     </div>

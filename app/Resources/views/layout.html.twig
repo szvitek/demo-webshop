@@ -39,7 +39,11 @@
 
     <div class="row">
 
-        {{ render(controller('AppBundle:Default:_categories')) }}
+        {% if active is defined %}
+            {{ render(controller('AppBundle:Default:_categories', {'active': active})) }}
+        {% else %}
+            {{ render(controller('AppBundle:Default:_categories', {'active': 0})) }}
+        {% endif %}
 
         <div class="col-md-9">
 

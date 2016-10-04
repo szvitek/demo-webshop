@@ -2,10 +2,10 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Category;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends Controller
 {
@@ -18,7 +18,7 @@ class DefaultController extends Controller
         $products = $this->getDoctrine()->getRepository('AppBundle:Product')->findBy(array('isFeatured' => true));
 
         return array(
-            'products' => $products
+            'products' => $products,
         );
     }
 
@@ -31,7 +31,8 @@ class DefaultController extends Controller
     public function listCategoryAction($slug)
     {
         $em = $this->getDoctrine()->getManager();
-        $category = $em->getRepository('AppBundle:Category')->findBy(array('slug' => $slug));
+        /** @var Category $category */
+        $category = $em->getRepository('AppBundle:Category')->findOneBy(array('slug' => $slug));
         if (!$category) {
             return $this->redirect($this->generateUrl('homepage'));
         }
@@ -39,7 +40,27 @@ class DefaultController extends Controller
         $products = $em->getRepository('AppBundle:Product')->findBy(array('category' => $category));
 
         return array(
-            'products' => $products
+            'products' => $products,
+            'active' => $category->getId()
+        );
+    }
+
+    /**
+     * @param $id
+     * @return array
+     * @Route("/product/{id}", name="product_show")
+     * @Template(":default:product.html.twig")
+     */
+    public function productDetailsAction($id)
+    {
+        $product = $this->getDoctrine()->getRepository('AppBundle:Product')->find($id);
+        if (!$product){
+            throw $this->createNotFoundException('No product found for id '.$id);
+        }
+
+        return array(
+            'product' => $product,
+            'active' => $product->getCategory()->getId()
         );
     }
 
@@ -47,12 +68,13 @@ class DefaultController extends Controller
      * @return array
      * @Template(":default:_categories.html.twig")
      */
-    public function _categoriesAction()
+    public function _categoriesAction($active =0)
     {
         $categories = $this->getDoctrine()->getRepository('AppBundle:Category')->findAll();
 
         return array(
-            'categories' => $categories
+            'categories' => $categories,
+            'active' => $active
         );
     }
 }
