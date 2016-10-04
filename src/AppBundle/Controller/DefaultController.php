@@ -11,11 +11,36 @@ class DefaultController extends Controller
 {
     /**
      * @Route("/", name="homepage")
+     * @Template(":default:index.html.twig")
      */
-    public function indexAction(Request $request)
+    public function indexAction()
     {
-        // replace this example code with whatever you need
-        return $this->render('default/index.html.twig');
+        $products = $this->getDoctrine()->getRepository('AppBundle:Product')->findBy(array('isFeatured' => true));
+
+        return array(
+            'products' => $products
+        );
+    }
+
+    /**
+     * @param $slug
+     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
+     * @Route("/category/{slug}", name="category_list")
+     * @Template(":default:index.html.twig")
+     */
+    public function listCategoryAction($slug)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $category = $em->getRepository('AppBundle:Category')->findBy(array('slug' => $slug));
+        if (!$category) {
+            return $this->redirect($this->generateUrl('homepage'));
+        }
+
+        $products = $em->getRepository('AppBundle:Product')->findBy(array('category' => $category));
+
+        return array(
+            'products' => $products
+        );
     }
 
     /**

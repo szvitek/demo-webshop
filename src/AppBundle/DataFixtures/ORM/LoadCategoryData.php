@@ -19,7 +19,7 @@ class LoadCategoryData extends AbstractFixture implements OrderedFixtureInterfac
     public function load(ObjectManager $manager)
     {
         $names = array("Shirts","T-Shirts","Suits", "Trousers", "Underwear", "Hoodies", "Dresses", "Coats and Jackets", "Tops",
-            "Pants and Shorts", "Skirts", "Shoes", "Sandals", "Boots", "Handbags", "Purses and Wallets", "Backpacks", "Kids", "Accessories"
+            "Pants and Shorts", "Skirts", "Shoes", "Backpacks", "Accessories"
         );
 
         foreach ($names as $name) {
