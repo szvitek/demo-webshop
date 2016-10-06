@@ -13,21 +13,44 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="{{ path('homepage') }}">Homepage</a>
+            <a class="navbar-brand" href="{{ path('homepage') }}">Featured Items</a>
         </div>
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                 <li>
-                    <a href="#">About</a>
+                    <a href="#">Info</a>
                 </li>
                 <li>
-                    <a href="#">Services</a>
+                    <a href="#" data-toggle="modal" data-target="#modalCart">Cart <span class="badge">{{ app.session.get('cart')|length }}</span></a>
                 </li>
-                <li>
-                    <a href="#">Contact</a>
-                </li>
+                {% if is_granted("IS_AUTHENTICATED_REMEMBERED")  %}
+                    <li>
+                        <a href="{{ path('logout') }}" title="Good bye {{ app.user.username }}!">Logout</a>
+                    </li>
+                {% else %}
+                    <li>
+                        <a href="">Login</a>
+                    </li>
+                {% endif %}
             </ul>
+            {#<div class="search pull-right">#}
+                {#<form class="navbar-form" role="search">#}
+                    {#<input type="text" placeholder="Search" name="keyword">#}
+                    {#<span class="glyphicon glyphicon-search" aria-hidden="true"></span>#}
+                {#</form>#}
+            {#</div>#}
+
+            <div class="col-md-3 form-group search">
+                <form class="navbar-form" action="{{ path('homepage') }}" method="get">
+                    <label class="form-control sr-only" for="search-field">Search</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="search-field" placeholder="search" name="search" aria-describedby="start-date">
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
+                    </div>
+                </form>
+            </div>
+
         </div>
         <!-- /.navbar-collapse -->
     </div>
@@ -57,6 +80,28 @@
 </div>
 <!-- /.container -->
 
+<!-- Modal -->
+<div id="modal">
+    <div class="modal fade" id="modalCart" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Shopping Cart</h4>
+            </div>
+            <div class="modal-body">
+                {{ render(controller('AppBundle:Default:_modalBody')) }}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+<!-- /Modal -->
+
 <div class="container">
 
     <hr>
@@ -65,11 +110,32 @@
     <footer>
         <div class="row">
             <div class="col-lg-12">
-                <p>Copyright &copy; Your Website 2014</p>
+                <p>Copyright &copy; Demo Webshop 2016</p>
             </div>
         </div>
     </footer>
 
 </div>
 <!-- /.container -->
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        $(function() {
+            $(document).on("click", ".remove-button", function() {
+                var id = $(this).attr('data-id');
+
+                $.ajax({
+                    method: "POST",
+                    url: "/cart/remove",
+                    data: { id: id }
+                }).done(function (resp) {
+                    $('span.badge').html(resp.cartLength);
+                    $('div.modal-body').html(resp.modal);
+                });
+            });
+        });
+    </script>
 {% endblock %}

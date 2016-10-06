@@ -1,16 +1,28 @@
 {% extends '::layout.html.twig' %}
 
 {% block content %}
-    <div class="thumbnail">
+    <div class="thumbnail clearfix">
         <img class="img-responsive" src="http://placehold.it/800x300" alt="">
         <div class="caption-full">
             <h4 class="pull-right">&pound;{{ product.price }}</h4>
-            <h4><a href="#">{{ product.name }}</a> - {{ product.quantity }}
+            <h4><a href="#">{{ product.name }}</a>
+                {% if product.quantity == 0 %}
+                    <span class="glyphicon glyphicon-info-sign red" data-toggle="tooltip" data-placement="right" title="We are out of stock at the moment"></span>
+                {% elseif  product.quantity < 5 %}
+                    <span class="glyphicon glyphicon-info-sign orange" data-toggle="tooltip" data-placement="right" title="Only few pieces left"></span>
+                {% elseif  product.quantity < 10 %}
+                    <span class="glyphicon glyphicon-info-sign yellow" data-toggle="tooltip" data-placement="right" title="Less than 10 pieces left"></span>
+                {% else %}
+                    <span class="glyphicon glyphicon-info-sign green" data-toggle="tooltip" data-placement="right" title="{{ product.quantity }} pieces in the shop"></span>
+                {% endif %}
             </h4>
             <p>{{ product.description }}</p>
         </div>
         <div class="ratings">
-            <p class="pull-right">3 reviews</p>
+            <div class=" pull-right form-group-sm">
+                <button class="btn btn-primary add-button"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> Add to cart</button>
+                <p class="quantity-input"><input id="input-quantity" class="form-control" type="number" placeholder="1" value="1" min="1" max="99" maxlength="2"></p>
+            </div>
             <p>
                 <span class="glyphicon glyphicon-star"></span>
                 <span class="glyphicon glyphicon-star"></span>
@@ -22,6 +34,7 @@
         </div>
     </div>
 
+    <!--
     <div class="well">
 
         <div class="text-right">
@@ -74,4 +87,29 @@
         </div>
 
     </div>
+    -->
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        $(function() {
+            $('.glyphicon-info-sign').tooltip();
+
+            $(".add-button").click(function() {
+
+                var quantity = $("#input-quantity").val();
+
+                $.ajax({
+                    method: "POST",
+                    url: "/cart/add",
+                    data: { id: {{ product.id }}, quantity: quantity }
+                }).done(function (resp) {
+                    $('span.badge').html(resp.cartLength);
+                    $('div.modal-body').html(resp.modal);
+                });
+            });
+        });
+    </script>
 {% endblock %}

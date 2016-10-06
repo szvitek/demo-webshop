@@ -1,69 +1,113 @@
 {% extends '::layout.html.twig' %}
 
 {% block content %}
-    {% if products|length > 5 %}
-        <div class="row carousel-holder">
+    {% if products|length > 0 %}
+        {% if products|length > 5 %}
+            <div class="row carousel-holder">
 
-            <div class="col-md-12">
-                <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-                    <ol class="carousel-indicators">
-                        <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-                        <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-                        <li data-target="#carousel-example-generic" data-slide-to="2"></li>
-                        <li data-target="#carousel-example-generic" data-slide-to="3"></li>
-                        <li data-target="#carousel-example-generic" data-slide-to="4"></li>
-                    </ol>
-                    <div class="carousel-inner">
-                        {% for i in 1..5 %}
-                            {% set randomProduct = random(products) %}
-                            {% if i == 1 %}
-                                <div class="item active">
-                            {% else %}
-                                <div class="item">
-                            {% endif %}
-                                <img class="slide-image" src="http://placehold.it/800x300" alt="">
-                                <div class="carousel-caption"><a href="{{ path('product_show', { 'id': randomProduct.id }) }}">{{ randomProduct.name }}</a></div>
-                            </div>
+                <div class="col-md-12">
+                    <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+                        <ol class="carousel-indicators">
+                            <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                            <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                            <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+                            <li data-target="#carousel-example-generic" data-slide-to="3"></li>
+                            <li data-target="#carousel-example-generic" data-slide-to="4"></li>
+                        </ol>
+                        <div class="carousel-inner">
+                            {% for i in 1..5 %}
+                                {% set randomProduct = random(products) %}
+                                {% if i == 1 %}
+                                    <div class="item active">
+                                {% else %}
+                                    <div class="item">
+                                {% endif %}
+                                    <img class="slide-image" src="http://placehold.it/800x300" alt="">
+                                    <div class="carousel-caption"><a href="{{ path('product_show', { 'id': randomProduct.id }) }}">{{ randomProduct.name }}</a></div>
+                                </div>
 
-                        {% endfor %}
+                            {% endfor %}
+                        </div>
+                        <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+                            <span class="glyphicon glyphicon-chevron-left"></span>
+                        </a>
+                        <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+                            <span class="glyphicon glyphicon-chevron-right"></span>
+                        </a>
                     </div>
-                    <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
-                        <span class="glyphicon glyphicon-chevron-left"></span>
-                    </a>
-                    <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
-                        <span class="glyphicon glyphicon-chevron-right"></span>
-                    </a>
                 </div>
-            </div>
 
+            </div>
+        {% endif %}
+
+        <div class="row">
+
+            {% for product in products %}
+                <div class="col-sm-4 col-lg-4 col-md-4">
+                    <div class="thumbnail">
+                        <img src="http://placehold.it/320x150" alt="">
+                        <div class="caption">
+                            <h4 class="pull-right">&pound;{{ product.price }}</h4>
+                            <h4><a href="{{ path('product_show', {'id':product.id}) }}">{{ product.name }}</a>
+                                {% if product.quantity == 0 %}
+                                    <span class="glyphicon glyphicon-info-sign red" data-toggle="tooltip" data-placement="right" title="We are out of stock at the moment"></span>
+                                {% elseif  product.quantity < 5 %}
+                                    <span class="glyphicon glyphicon-info-sign orange" data-toggle="tooltip" data-placement="right" title="Only few pieces left"></span>
+                                {% elseif  product.quantity < 10 %}
+                                    <span class="glyphicon glyphicon-info-sign yellow" data-toggle="tooltip" data-placement="right" title="Less than 10 pieces left"></span>
+                                {% else %}
+                                    <span class="glyphicon glyphicon-info-sign green" data-toggle="tooltip" data-placement="right" title="{{ product.quantity }} pieces in the shop"></span>
+                                {% endif %}
+                            </h4>
+                            <p>{{ product.description }}</p>
+                        </div>
+                        <div class="ratings">
+                            <p class="pull-right"><a role="button" data-id="{{ product.id }}" class="btn btn-primary btn-xs add-button" href="#"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> Add to cart</a></p>
+                            <p>
+                                <span class="glyphicon glyphicon-star"></span>
+                                <span class="glyphicon glyphicon-star"></span>
+                                <span class="glyphicon glyphicon-star"></span>
+                                <span class="glyphicon glyphicon-star"></span>
+                                <span class="glyphicon glyphicon-star"></span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+    {% else %}
+        <div class="row">
+            {% if keyword is defined %}
+                <h3>There are no search results for keyword: {{ keyword }}</h3>
+            {% else %}
+                <h3>There are no items in this category :(</h3>
+            {% endif %}
         </div>
     {% endif %}
 
-    <div class="row">
-
-        {% for product in products %}
-            <div class="col-sm-4 col-lg-4 col-md-4">
-                <div class="thumbnail">
-                    <img src="http://placehold.it/320x150" alt="">
-                    <div class="caption">
-                        <h4 class="pull-right">&pound;{{ product.price }}</h4>
-                        <h4><a href="{{ path('product_show', {'id':product.id}) }}">{{ product.name }}</a> - {{ product.quantity }}
-                        </h4>
-                        <p>{{ product.description }}</p>
-                    </div>
-                    <div class="ratings">
-                        <p class="pull-right">15 reviews</p>
-                        <p>
-                            <span class="glyphicon glyphicon-star"></span>
-                            <span class="glyphicon glyphicon-star"></span>
-                            <span class="glyphicon glyphicon-star"></span>
-                            <span class="glyphicon glyphicon-star"></span>
-                            <span class="glyphicon glyphicon-star"></span>
-                        </p>
-                    </div>
-                </div>
-            </div>
-        {% endfor %}
-
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        $(function() {
+            $('[data-toggle="tooltip"]').tooltip()
+
+            $(".add-button").click(function(event) {
+                event.preventDefault();
+                var id = $(this).attr('data-id');
+
+                $.ajax({
+                    method: "POST",
+                    url: "/cart/add",
+                    data: { id: id, quantity: 1 }
+                }).done(function (resp) {
+                    $('span.badge').html(resp.cartLength);
+                    $('div.modal-body').html(resp.modal);
+                });
+            });
+
+        });
+    </script>
 {% endblock %}

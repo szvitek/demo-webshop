@@ -6,6 +6,7 @@ use AppBundle\Entity\Category;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends Controller
 {
@@ -13,13 +14,26 @@ class DefaultController extends Controller
      * @Route("/", name="homepage")
      * @Template(":default:index.html.twig")
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
-        $products = $this->getDoctrine()->getRepository('AppBundle:Product')->findBy(array('isFeatured' => true));
+        $keyword = $request->query->get('search');
 
-        return array(
-            'products' => $products,
-        );
+        $returnArray = array();
+
+        if ($keyword) {
+            $products = $this->getDoctrine()->getRepository('AppBundle:Product')->search($keyword);
+
+            if (!$products) {
+                $returnArray['keyword'] = $keyword;
+            }
+
+
+        } else {
+            $products = $this->getDoctrine()->getRepository('AppBundle:Product')->findBy(array('isFeatured' => true));
+        }
+        $returnArray['products'] = $products;
+
+        return $returnArray;
     }
 
     /**
@@ -75,6 +89,26 @@ class DefaultController extends Controller
         return array(
             'categories' => $categories,
             'active' => $active
+        );
+    }
+
+    /**
+     * @param Request $request
+     * @return array
+     * @Template(":default:_modalCart.html.twig")
+     */
+    public function _modalBodyAction(Request $request)
+    {
+        $cart = $request->getSession()->get('cart');
+
+        if (count($cart) == 0){
+            $products = array();
+        }else {
+            $products = $this->getDoctrine()->getRepository('AppBundle:Product')->findBy(array('id' => array_keys($cart)));
+        }
+
+        return array(
+            'products' => $products
         );
     }
 }

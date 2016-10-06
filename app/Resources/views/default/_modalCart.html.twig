@@ -1,0 +1,33 @@
+<table class="table table-striped table-condensed">
+    <thead>
+    <tr>
+        <td>Picture</td>
+        <td>Id</td>
+        <td>Name</td>
+        <td>Price</td>
+        <td>Quantity</td>
+        <td>Total</td>
+        <td>Action</td>
+    </tr>
+    </thead>
+    <tbody>
+    {% if products|length > 0 %}
+        {% for product in products %}
+            <tr>
+                {% set q = app.session.get('cart')[product.id] %}
+                <td><img class="slide-image" src="http://placehold.it/160x60" alt=""></td>
+                <td>{{ product.id }}</td>
+                <td>{{ product.name }}</td>
+                <td>{{ product.price}}</td>
+                <td>{{ q }}</td>
+                <td>&pound; {{ product.price * q }}</td>
+                <td><button data-id="{{ product.id }}" class="btn btn-danger remove-button" type="button"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>
+            </tr>
+        {% endfor %}
+    {% else %}
+        <tr class="danger">
+            <td colspan="7" class="text-center">Your cart is empty</td>
+        </tr>
+    {% endif %}
+    </tbody>
+</table>

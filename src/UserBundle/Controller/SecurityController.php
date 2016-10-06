@@ -38,7 +38,7 @@ class SecurityController extends Controller
 
     /**
      * @throws \Exception
-     * @Route("/logout", name="security_logout")
+     * @Route("/logout", name="logout")
      */
     public function logoutAction()
     {
