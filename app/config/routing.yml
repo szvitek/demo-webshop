@@ -1,7 +1,12 @@
 app:
     resource: "@AppBundle/Controller/"
     type:     annotation
+    options:
+        expose: true
 
 user:
     resource: "@UserBundle/Controller/"
     type: annotation
+
+fos_js_routing:
+    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"

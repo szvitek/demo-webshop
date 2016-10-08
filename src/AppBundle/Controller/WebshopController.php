@@ -8,11 +8,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
-class DefaultController extends Controller
+class WebshopController extends Controller
 {
     /**
      * @Route("/", name="homepage")
-     * @Template(":default:index.html.twig")
+     * @Template(":webshop:index.html.twig")
      */
     public function indexAction(Request $request)
     {
@@ -40,7 +40,7 @@ class DefaultController extends Controller
      * @param $slug
      * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      * @Route("/category/{slug}", name="category_list")
-     * @Template(":default:index.html.twig")
+     * @Template(":webshop:index.html.twig")
      */
     public function listCategoryAction($slug)
     {
@@ -63,7 +63,7 @@ class DefaultController extends Controller
      * @param $id
      * @return array
      * @Route("/product/{id}", name="product_show")
-     * @Template(":default:product.html.twig")
+     * @Template(":webshop:product.html.twig")
      */
     public function productDetailsAction($id)
     {
@@ -80,7 +80,17 @@ class DefaultController extends Controller
 
     /**
      * @return array
-     * @Template(":default:_categories.html.twig")
+     * @Route("/checkout", name="checkout")
+     * @Template(":webshop:checkout.html.twig")
+     */
+    public function checkoutAction()
+    {
+        return array();
+    }
+
+    /**
+     * @return array
+     * @Template(":partial:_categories.html.twig")
      */
     public function _categoriesAction($active =0)
     {
@@ -95,7 +105,7 @@ class DefaultController extends Controller
     /**
      * @param Request $request
      * @return array
-     * @Template(":default:_modalCart.html.twig")
+     * @Template(":partial:_modalCart.html.twig")
      */
     public function _modalBodyAction(Request $request)
     {

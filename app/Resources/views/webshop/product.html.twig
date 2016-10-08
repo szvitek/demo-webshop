@@ -20,7 +20,7 @@
         </div>
         <div class="ratings">
             <div class=" pull-right form-group-sm">
-                <button class="btn btn-primary add-button"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> Add to cart</button>
+                <button class="btn btn-primary add-button" data-id="{{ product.id }}"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> Add to cart</button>
                 <p class="quantity-input"><input id="input-quantity" class="form-control" type="number" placeholder="1" value="1" min="1" max="99" maxlength="2"></p>
             </div>
             <p>
@@ -97,19 +97,7 @@
         $(function() {
             $('.glyphicon-info-sign').tooltip();
 
-            $(".add-button").click(function() {
 
-                var quantity = $("#input-quantity").val();
-
-                $.ajax({
-                    method: "POST",
-                    url: "/cart/add",
-                    data: { id: {{ product.id }}, quantity: quantity }
-                }).done(function (resp) {
-                    $('span.badge').html(resp.cartLength);
-                    $('div.modal-body').html(resp.modal);
-                });
-            });
         });
     </script>
 {% endblock %}

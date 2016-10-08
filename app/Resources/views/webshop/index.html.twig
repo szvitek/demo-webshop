@@ -92,7 +92,7 @@
 
     <script>
         $(function() {
-            $('[data-toggle="tooltip"]').tooltip()
+            $('[data-toggle="tooltip"]').tooltip();
 
             $(".add-button").click(function(event) {
                 event.preventDefault();
@@ -100,7 +100,7 @@
 
                 $.ajax({
                     method: "POST",
-                    url: "/cart/add",
+                    url: Routing.generate('cart-add'),
                     data: { id: id, quantity: 1 }
                 }).done(function (resp) {
                     $('span.badge').html(resp.cartLength);

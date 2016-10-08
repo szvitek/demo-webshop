@@ -63,9 +63,9 @@
     <div class="row">
 
         {% if active is defined %}
-            {{ render(controller('AppBundle:Default:_categories', {'active': active})) }}
+            {{ render(controller('AppBundle:Webshop:_categories', {'active': active})) }}
         {% else %}
-            {{ render(controller('AppBundle:Default:_categories', {'active': 0})) }}
+            {{ render(controller('AppBundle:Webshop:_categories', {'active': 0})) }}
         {% endif %}
 
         <div class="col-md-9">
@@ -90,11 +90,11 @@
                 <h4 class="modal-title" id="myModalLabel">Shopping Cart</h4>
             </div>
             <div class="modal-body">
-                {{ render(controller('AppBundle:Default:_modalBody')) }}
+                {{ render(controller('AppBundle:Webshop:_modalBody')) }}
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <a href="{{ path('checkout') }}" role="button" class="btn btn-success" id="button-checkout">Checkout</a>
             </div>
         </div>
     </div>
@@ -124,18 +124,102 @@
 
     <script>
         $(function() {
-            $(document).on("click", ".remove-button", function() {
+            $(".add-button").click(function() {
                 var id = $(this).attr('data-id');
+                var quantity = $("#input-quantity").val();
 
                 $.ajax({
                     method: "POST",
-                    url: "/cart/remove",
-                    data: { id: id }
+                    url: Routing.generate('cart-add'),
+                    data: { id: id, quantity: quantity }
                 }).done(function (resp) {
                     $('span.badge').html(resp.cartLength);
                     $('div.modal-body').html(resp.modal);
+                    calculateTotal();
                 });
             });
+
+            $(document).on("click", ".remove-button", function() {
+                var button = $(this);
+                var id = button.attr('data-id');
+
+                $.ajax({
+                    method: "POST",
+                    url: Routing.generate('cart-remove'),
+                    data: { id: id }
+                }).done(function (resp) {
+                    $('span.badge').html(resp.cartLength);
+                    if (resp.cartLength == 0 ){
+                        $('div.modal-body').html(resp.modal);
+                    } else {
+                        button.closest("tr").remove();
+                        calculateTotal();
+                    }
+                });
+            });
+
+            // validate the input quantity, and calculate the sub-totals in the cart
+            $(document).on("change keyup", ".input-q", function() {
+                var input = $(this);
+                var price = input.closest('tr').find('.price').text();
+                var max = input.prop('max');
+
+                if ( parseInt(input.val()) < parseInt(max) && parseInt(input.val()) > 0 ) {
+                    input.closest('tr').find('.item-total').html('&pound ' + (input.val() * price));
+                }
+                if ( parseInt(input.val()) > parseInt(max)){
+                    input.val(max);
+                    input.closest('tr').find('.item-total').html('&pound ' + (input.val() * price));
+                }
+                if ( parseInt(input.val()) < 1 ) {
+                    input.val(1);
+                    input.closest('tr').find('.item-total').html('&pound ' + (input.val() * price));
+                }
+
+                calculateTotal();
+            });
+
+            //when close the modal...
+            $("#modal").on("hidden.bs.modal ", function () {
+                updateCart();
+            });
+
+            $(document).on("click", "#button-checkout", function(event) {
+               event.preventDefault();
+
+                updateCart().done(function() {
+                    window.location.href = $('#button-checkout').prop('href');
+                });
+
+            });
+
+            function calculateTotal()
+            {
+                var quantityArray = $('.input-q');
+                var total = 0;
+
+                for (i = 0; i < quantityArray.length; i++) {
+                    total += parseInt($(quantityArray[i]).closest('tr').find('.item-total').text().match(/\d+/)[0]);
+                }
+                $('#total').html('&pound ' + total);
+            }
+
+            function updateCart()
+            {
+                var quantityArray = $('.input-q');
+                var items = {};
+
+                for (i = 0; i < quantityArray.length; i++) {
+                    var id = $(quantityArray[i]).closest('tr').find('.remove-button').attr('data-id');
+                    items[id] = $(quantityArray[i]).val();
+                }
+                var cart = JSON.stringify(items);
+                return $.ajax({
+                    method: "POST",
+                    url: Routing.generate('cart-update'),
+                    data: { cart: cart }
+                });
+            }
         });
     </script>
 {% endblock %}

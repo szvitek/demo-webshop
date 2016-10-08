@@ -1,0 +1,42 @@
+<table class="table table-striped table-condensed text-center">
+    <thead>
+    <tr>
+        <td>Picture</td>
+        <td>Name</td>
+        <td>Price</td>
+        <td>Quantity</td>
+        <td>Total</td>
+        <td>Action</td>
+    </tr>
+    </thead>
+    <tbody>
+    {% if products|length > 0 %}
+        {% for product in products %}
+            <tr class="text-center">
+                {% set q = app.session.get('cart')[product.id] %}
+                <td><img class="slide-image" src="http://placehold.it/160x60" alt=""></td>
+                <td><a href="{{ path('product_show', { 'id': product.id }) }}">{{ product.name }}</a></td>
+                <td class="price">{{ product.price}}</td>
+                {# (temporarily) removed
+                <td><a href="#" class="q-decrement"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></a> <input type="number" class="input-q" maxlength="2" max="{{ product.quantity }}" placeholder="{{ q }}" value="{{ q }}" disabled>
+                    <a href="#" class="q-increment"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a>
+                </td>
+                #}
+                <td>
+                    <input type="number" class="input-q" maxlength="2" min="1" max="{{ product.quantity }}" placeholder="{{ q }}" value="{{ q }}">
+                </td>
+                <td class="item-total">&pound; {{ product.price * q }}</td>
+                <td><button data-id="{{ product.id }}" class="btn btn-danger remove-button" type="button"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>
+            </tr>
+        {% endfor %}
+        <tr>
+            <td class="info text-right" colspan="4">Total: </td>
+            <td class="warning text-left" colspan="2" id="total">&pound; {{ app.session.get('total')? app.session.get('total') : 0 }}</td>
+        </tr>
+    {% else %}
+        <tr class="danger">
+            <td colspan="7" class="text-center">Your cart is empty</td>
+        </tr>
+    {% endif %}
+    </tbody>
+</table>
