@@ -21,9 +21,9 @@ class RegistrationController extends Controller
 {
     /**
      * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
-     * @Template("@User/registration/register.html.twig")
+     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      * @Route("/register", name="user_registration")
+     * @Template("UserBundle:registration:register.html.twig")
      */
     public function registerAction(Request $request)
     {

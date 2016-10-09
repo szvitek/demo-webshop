@@ -1,73 +1,71 @@
 {% extends '::base.html.twig' %}
 
+{% block navigation %}
+    <!-- Navigation -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="{{ path('homepage') }}"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> Featured Items</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="#"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Info</a>
+                    </li>
+                    <li>
+                        <a href="#" data-toggle="modal" data-target="#modalCart"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> Cart <span class="badge">{{ app.session.get('cart')|length }}</span></a>
+                    </li>
+                    {% if is_granted("IS_AUTHENTICATED_REMEMBERED")  %}
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> {{ app.user.username }} <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="{{ path("profile-show") }}">Profile</a>
+                                </li>
+                                <li>
+                                    <a href="{{ path('logout') }}" title="Good bye {{ app.user.username }}!">Logout</a>
+                                </li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li>
+                            <a href="{{ path("login") }}"><span class="glyphicon glyphicon-log-in"></span> Login</a>
+                        </li>
+                    {% endif %}
+                </ul>
+                {#<div class="search pull-right">#}
+                {#<form class="navbar-form" role="search">#}
+                {#<input type="text" placeholder="Search" name="keyword">#}
+                {#<span class="glyphicon glyphicon-search" aria-hidden="true"></span>#}
+                {#</form>#}
+                {#</div>#}
+
+                <div class="col-md-3 form-group search">
+                    <form class="navbar-form" action="{{ path('homepage') }}" method="get">
+                        <label class="form-control sr-only" for="search-field">Search</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="search-field" placeholder="search" name="search" aria-describedby="start-date">
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+{% endblock %}
 
 {% block body %}
-<!-- Navigation -->
-<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-    <div class="container">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="{{ path('homepage') }}"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> Featured Items</a>
-        </div>
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-                <li>
-                    <a href="#"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Info</a>
-                </li>
-                <li>
-                    <a href="#" data-toggle="modal" data-target="#modalCart"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> Cart <span class="badge">{{ app.session.get('cart')|length }}</span></a>
-                </li>
-                {% if is_granted("IS_AUTHENTICATED_REMEMBERED")  %}
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> {{ app.user.username }} <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a href="{{ path("profile-show") }}">Profile</a>
-                            </li>
-                            <li>
-                                <a href="{{ path('logout') }}" title="Good bye {{ app.user.username }}!">Logout</a>
-                            </li>
-                        </ul>
-                    </li>
-                {% else %}
-                    <li>
-                        <a href="{{ path("login") }}">Login</a>
-                    </li>
-                    <li>
-                        <a href="{{ path("user_registration") }}">Registration</a>
-                    </li>
-                {% endif %}
-            </ul>
-            {#<div class="search pull-right">#}
-                {#<form class="navbar-form" role="search">#}
-                    {#<input type="text" placeholder="Search" name="keyword">#}
-                    {#<span class="glyphicon glyphicon-search" aria-hidden="true"></span>#}
-                {#</form>#}
-            {#</div>#}
-
-            <div class="col-md-3 form-group search">
-                <form class="navbar-form" action="{{ path('homepage') }}" method="get">
-                    <label class="form-control sr-only" for="search-field">Search</label>
-                    <div class="input-group">
-                        <input type="text" class="form-control" id="search-field" placeholder="search" name="search" aria-describedby="start-date">
-                        <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
-                    </div>
-                </form>
-            </div>
-
-        </div>
-        <!-- /.navbar-collapse -->
-    </div>
-    <!-- /.container -->
-</nav>
-
 <!-- Page Content -->
 <div class="container">
 

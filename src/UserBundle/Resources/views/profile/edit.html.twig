@@ -1,5 +1,7 @@
 {% extends '::layout.html.twig' %}
 
+{% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
+
 {% block content %}
     <h1>Edit User Information</h1>
     {{ form_start(form) }}
@@ -9,6 +11,8 @@
         {{ form_row(form.county) }}
         {{ form_row(form.zip) }}
         {{ form_row(form.country) }}
-        <button type="submit">Edit!</button>
+    <hr>
+    <button type="submit" class="btn btn-success pull-right">Edit</button>
+    <a href="{{ path('profile-show') }}" class="btn btn-primary pull-right" role="button">Back</a>
     {{ form_end(form) }}
 {% endblock %}

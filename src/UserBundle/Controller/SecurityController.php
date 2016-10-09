@@ -17,7 +17,7 @@ class SecurityController extends Controller
 {
     /**
      * @Route("/login", name="login")
-     * @Template("@User/security/login.html.twig")
+     * @Template("UserBundle:security:login.html.twig")
      */
     public function loginAction(Request $request)
     {
