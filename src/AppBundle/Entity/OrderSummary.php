@@ -28,7 +28,7 @@ class OrderSummary
     /**
      * @ORM\Column(type="string")
      */
-    private $fullname;
+    private $fullName;
 
     /**
      * @ORM\Column(type="string")
@@ -66,7 +66,7 @@ class OrderSummary
     private $createdAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity="UserBundle\Entity\User", inversedBy="oreders")
+     * @ORM\ManyToOne(targetEntity="UserBundle\Entity\User", inversedBy="orders")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     private $user;
@@ -94,17 +94,17 @@ class OrderSummary
     /**
      * @return mixed
      */
-    public function getFullname()
+    public function getFullName()
     {
-        return $this->fullname;
+        return $this->fullName;
     }
 
     /**
-     * @param mixed $fullname
+     * @param mixed $fullName
      */
-    public function setFullname($fullname)
+    public function setFullName($fullName)
     {
-        $this->fullname = $fullname;
+        $this->fullName = $fullName;
     }
 
     /**

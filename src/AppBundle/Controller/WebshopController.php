@@ -102,7 +102,7 @@ class WebshopController extends Controller
             $em = $this->getDoctrine()->getManager();
 
             $summary = new OrderSummary();
-            $summary->setFullname($form->get('fullName')->getData());
+            $summary->setFullName($form->get('fullName')->getData());
             $summary->setAddress($form->get('address')->getData());
             $summary->setCity($form->get('city')->getData());
             $summary->setCounty($form->get('county')->getData());
