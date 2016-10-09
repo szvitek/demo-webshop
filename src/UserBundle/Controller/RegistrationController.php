@@ -8,11 +8,11 @@
 
 namespace UserBundle\Controller;
 
-
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use UserBundle\Entity\User;
 use UserBundle\Form\UserType;
 
@@ -22,8 +22,8 @@ class RegistrationController extends Controller
     /**
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
-     * @Route("/register", name="user_registration")
      * @Template("@User/registration/register.html.twig")
+     * @Route("/register", name="user_registration")
      */
     public function registerAction(Request $request)
     {
@@ -45,12 +45,21 @@ class RegistrationController extends Controller
             // ... do any other work - like sending them an email, etc
             // maybe set a "flash" success message for the user
 
+            $this->authenticateUser($user);
             return $this->redirectToRoute('homepage');
         }
 
         return array(
             'form' => $form->createView()
         );
+    }
+
+    private function authenticateUser(User $user)
+    {
+        $providerKey = 'secured_area'; // your firewall name
+        $token = new UsernamePasswordToken($user, null, $providerKey, $user->getRoles());
+
+        $this->container->get('security.token_storage')->setToken($token);
     }
 
 }

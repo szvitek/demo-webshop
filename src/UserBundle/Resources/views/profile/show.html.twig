@@ -1,0 +1,14 @@
+{% extends '::layout.html.twig' %}
+
+{% block content %}
+    <h1>Profile</h1>
+
+    <p>Full name: {{ app.user.fullName ? app.user.fullName : 'null' }}</p>
+    <p>Address: {{ app.user.address ? app.user.address : 'null' }}</p>
+    <p>City: {{ app.user.city ? app.user.city : 'null' }}</p>
+    <p>County: {{ app.user.county ? app.user.county : 'null' }}</p>
+    <p>Zip: {{ app.user.zip ? app.user.zip : 'null' }}</p>
+    <p>Country: {{ app.user.country ? app.user.country : 'null' }}</p>
+
+    <a href="{{ path('profile-edit') }}">Edit</a>
+{% endblock %}

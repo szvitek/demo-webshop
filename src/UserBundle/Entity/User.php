@@ -8,6 +8,7 @@
 
 namespace UserBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -30,12 +31,12 @@ class User implements AdvancedUserInterface, \Serializable
 
     /**
      * @ORM\Column(type="string", length=25, unique=true)
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(groups={"Registration"})
      */
     private $username;
 
     /**
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(groups={"Registration"})
      * @Assert\Length(max=4096)
      */
     private $plainPassword;
@@ -47,8 +48,8 @@ class User implements AdvancedUserInterface, \Serializable
 
     /**
      * @ORM\Column(type="string", length=60, unique=true)
-     * @Assert\NotBlank()
-     * @Assert\Email()
+     * @Assert\NotBlank(groups={"Registration"})
+     * @Assert\Email(groups={"Registration"})
      */
     private $email;
 
@@ -57,8 +58,50 @@ class User implements AdvancedUserInterface, \Serializable
      */
     private $isActive;
 
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @Assert\NotBlank(groups={"userInfo"})
+     */
+    private $fullName;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @Assert\NotBlank(groups={"userInfo"})
+     */
+    private $address;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @Assert\NotBlank(groups={"userInfo"})
+     */
+    private $city;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @Assert\NotBlank(groups={"userInfo"})
+     */
+    private $county;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @Assert\NotBlank(groups={"userInfo"})
+     */
+    private $zip;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @Assert\NotBlank(groups={"userInfo"})
+     */
+    private $country;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\OrderSummary", mappedBy="user")
+     */
+    private $orders;
+
     public function __construct()
     {
+        $this->orders = new ArrayCollection();
         $this->isActive = true;
         // may not be needed, see section on salt below
         // $this->salt = md5(uniqid(null, true));
@@ -239,4 +282,110 @@ class User implements AdvancedUserInterface, \Serializable
     {
         return $this->isActive;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getFullName()
+    {
+        return $this->fullName;
+    }
+
+    /**
+     * @param mixed $fullName
+     */
+    public function setFullName($fullName)
+    {
+        $this->fullName = $fullName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAddress()
+    {
+        return $this->address;
+    }
+
+    /**
+     * @param mixed $address
+     */
+    public function setAddress($address)
+    {
+        $this->address = $address;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCity()
+    {
+        return $this->city;
+    }
+
+    /**
+     * @param mixed $city
+     */
+    public function setCity($city)
+    {
+        $this->city = $city;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCounty()
+    {
+        return $this->county;
+    }
+
+    /**
+     * @param mixed $county
+     */
+    public function setCounty($county)
+    {
+        $this->county = $county;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getZip()
+    {
+        return $this->zip;
+    }
+
+    /**
+     * @param mixed $zip
+     */
+    public function setZip($zip)
+    {
+        $this->zip = $zip;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
+    /**
+     * @param mixed $country
+     */
+    public function setCountry($country)
+    {
+        $this->country = $country;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOrders()
+    {
+        return $this->orders;
+    }
+
+
 }

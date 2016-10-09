@@ -9,6 +9,7 @@
 namespace AppBundle\Entity;
 
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -54,6 +55,16 @@ class Product
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      */
     private $category;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\OrderSelection", mappedBy="product")
+     */
+    private $orderSelections;
+
+    public function __construct()
+    {
+        $this->orderSelections = new ArrayCollection();
+    }
 
     /**
      * @return mixed
@@ -157,6 +168,14 @@ class Product
     public function setCategory(Category $category)
     {
         $this->category = $category;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOrderSelections()
+    {
+        return $this->orderSelections;
     }
 
 
