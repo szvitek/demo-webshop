@@ -40,6 +40,16 @@ class WebshopController extends Controller
     }
 
     /**
+     * @return array
+     * @Route("/info", name="info-page")
+     * @Template(":webshop:info.html.twig")
+     */
+    public function infoAction()
+    {
+        return array();
+    }
+
+    /**
      * @param $slug
      * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      * @Route("/category/{slug}", name="category_list")

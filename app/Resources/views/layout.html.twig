@@ -19,13 +19,13 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="{{ path('homepage') }}"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> Featured Items</a>
+                <a class="navbar-brand" href="{{ path('homepage') }}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> Featured Items</a>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li>
-                        <a href="#"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Info</a>
+                        <a href="{{ path('info-page') }}"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Info</a>
                     </li>
                     <li>
                         <a href="#" data-toggle="modal" data-target="#modalCart"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> Cart <span class="badge">{{ app.session.get('cart')|length }}</span></a>

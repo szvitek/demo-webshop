@@ -1,0 +1,64 @@
+{% extends '::layout.html.twig' %}
+
+{% block content %}
+    <h1>Info</h1>
+
+    <p>
+        Welcome on my demo webshop page. If you installed the app correctly and loaded the fixtures you can login with the following username/password combinations:
+    </p>
+    <hr/>
+
+    <table class="table table-striped">
+        <tr>
+            <th>Username</th>
+            <th>Password</th>
+        </tr>
+        <tr>
+            <td>admin</td><td>adminpass</td>
+        </tr>
+        <tr>
+            <td>hulk</td><td>userpass</td>
+        </tr>
+        <tr>
+            <td>deadpool</td><td>userpass</td>
+        </tr>
+        <tr>
+            <td>blackwidow</td><td>userpass</td>
+        </tr>
+        <tr>
+            <td>captain</td><td>userpass</td>
+        </tr>
+    </table>
+
+    <p>
+        You can add your own user. (Login -> Register) The page will logs the user in automatically. If you want to "buy" something it's easier to give the address on the Profile page. It comes handy later :)
+    </p>
+
+    <p>
+        Only the admin user has admin rights and only he can see the demo admin page. (Admin menu on the navbar)
+    </p>
+
+    <p>
+        The page is really simple, on the homepage you can see the featured items. Here you can add an item to the cart, or go inside the product's details page,
+        where you can set the amount that you want to put in the cart. When you add a new item to the cart it will be stored in the session and the cart counter will be increased every time.
+    </p>
+    <p>
+        If you re-add an item to the cart, the amount will be increased by 1 every time.
+        You can modify this amount in the cart too and the cart will be saved automatically every time when you close it. It's done by ajax.
+        So eg. when you close the cart and refresh the page and check the cart again you will see the same amount that you set before.
+        When you modify the amount, the prices are calculated automatically by javascript.
+        You can remove an item from the cart by click on the red remove button or you can go forward to the checkout page by clicking on the green checkout button
+    </p>
+    <p>
+        On the checkout page you can reset your cart and cancel the process or you can finish you order by click on the green order button.
+        The address fields are required but if you set them earlier in the profile page you can set everything by click on the checkbox.
+
+        Once you clicked on the order button a Summary entity will be created with the given details, the current date, the logged in user and the total price of items in the cart.
+        Also there will be create a Selection Entity for every item in the product that will be store the related product and the summary, the quantity, and the actual price (because the price of the product could change later but we want to store the price that was paid for).
+        The system will deducts the ordered quantity from the product's quantity.
+
+        If there are more than 10 from one product. You can see a green info sign next to it's name.
+        If there are less then 10 you can see a yellow info sign. If there are less than 5 you can see an orange icon, and if there is 0 of the product you can see a red icon.
+        You can't put more pieces in the cart from one product than we have it on stock.
+    </p>
+{% endblock %}
