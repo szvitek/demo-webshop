@@ -45,3 +45,8 @@ Install guide step-by-step:
     ```
 
 Now the demo application is ready to use at your localhost. You can see more details on the application's info page.
+
+If the ajax is not working, run:
+```
+php bin/console fos:js-routing:dump
+```
