@@ -45,6 +45,7 @@ security:
 
     access_control:
         - { path: ^/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ~/profile }
         - { path: ^/checkout, roles: IS_AUTHENTICATED_REMEMBERED }
         - { path: ^/finalize, roles: IS_AUTHENTICATED_REMEMBERED }
         - { path: ^/admin, roles: ROLE_ADMIN }

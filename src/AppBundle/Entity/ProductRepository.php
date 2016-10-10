@@ -22,4 +22,12 @@ class ProductRepository extends EntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findLowProducts()
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.quantity < 6')
+            ->getQuery()
+            ->getResult();
+    }
 }

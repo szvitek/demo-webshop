@@ -98,7 +98,10 @@ class WebshopController extends Controller
 
         $form = $this->createForm(UserInfoType::class);
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+
+        $cart = $request->getSession()->get('cart');
+
+        if ($form->isSubmitted() && $form->isValid() && count($cart) > 0) {
             $em = $this->getDoctrine()->getManager();
 
             $summary = new OrderSummary();
@@ -109,16 +112,15 @@ class WebshopController extends Controller
             $summary->setZip($form->get('zip')->getData());
             $summary->setCountry($form->get('county')->getData());
             $summary->setUser($this->getUser());
-            $em->persist($summary);
 
-            $cart = $request->getSession()->get('cart');
-
+            $price = 0;
             foreach ( $cart as $key => $value ){
                 $product = $em->getRepository('AppBundle:Product')->find($key);
 
                 $selection = new OrderSelection();
                 $selection->setPrice($product->getPrice());
                 $selection->setQuantity($value);
+                $price += $product->getPrice() * $value;
                 $selection->setProduct($product);
                 $selection->setSummary($summary);
                 $em->persist($selection);
@@ -126,6 +128,8 @@ class WebshopController extends Controller
                 $product->setQuantity($product->getQuantity()-$value);
                 $em->persist($product);
             }
+            $summary->setPrice($price);
+            $em->persist($summary);
 
             $em->flush();
 
@@ -138,6 +142,17 @@ class WebshopController extends Controller
             'products' => $products,
             'form' => $form->createView()
         );
+    }
+
+    /**
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @Route("cart/reset", name="cart-reset")
+     */
+    public function resetCartAction(Request $request)
+    {
+        $request->getSession()->remove('cart');
+        return $this->redirectToRoute('checkout');
     }
 
     /**

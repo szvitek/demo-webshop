@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 use UserBundle\Entity\User;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Entity\OrderSummaryRepository")
  * @ORM\Table(name="order_summary")
  */
 class OrderSummary
@@ -64,6 +64,11 @@ class OrderSummary
      * @ORM\Column(type="datetime")
      */
     private $createdAt;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $price;
 
     /**
      * @ORM\ManyToOne(targetEntity="UserBundle\Entity\User", inversedBy="orders")
@@ -209,6 +214,22 @@ class OrderSummary
     public function getCreatedAt()
     {
         return $this->createdAt;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPrice()
+    {
+        return $this->price;
+    }
+
+    /**
+     * @param mixed $price
+     */
+    public function setPrice($price)
+    {
+        $this->price = $price;
     }
 
     /**

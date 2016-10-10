@@ -24,7 +24,11 @@ class UserController extends Controller
      */
     public function profileShowAction()
     {
-        return array();
+        $orders = $this->getDoctrine()->getRepository('AppBundle:OrderSummary')->findOrdersByUser($this->getUser());
+
+        return array(
+            'orders' => $orders
+        );
     }
 
     /**

@@ -25,7 +25,7 @@ class UserInfoType extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => User::class,
-            'validation_groups' => array('Default', 'userInfo'),
+            'validation_groups' => array('userInfo'),
         ));
     }
 

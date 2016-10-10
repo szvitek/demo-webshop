@@ -23,11 +23,6 @@
                     <td><img class="slide-image" src="http://placehold.it/160x60" alt=""></td>
                     <td><a href="{{ path('product_show', { 'id': product.id }) }}">{{ product.name }}</a></td>
                     <td class="price">{{ product.price}}</td>
-                    {# (temporarily) removed
-                    <td><a href="#" class="q-decrement"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></a> <input type="number" class="input-q" maxlength="2" max="{{ product.quantity }}" placeholder="{{ q }}" value="{{ q }}" disabled>
-                        <a href="#" class="q-increment"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a>
-                    </td>
-                    #}
                     <td>
                         {{ q }}
                     </td>
@@ -64,7 +59,10 @@
         {{ form_row(form.zip) }}
         {{ form_row(form.country) }}
         <hr>
-        <button type="submit" class="btn btn-success pull-right">Order</button>
+        {% if app.session.get('cart')|length > 0 %}
+            <button type="submit" class="btn btn-success pull-right">Order</button>
+            <a href="{{ path('cart-reset') }}" class="btn btn-danger pull-right" role="button">Reset cart</a>
+        {% endif %}
     {{ form_end(form) }}
     </div>
 {% endblock %}

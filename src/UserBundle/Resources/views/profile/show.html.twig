@@ -10,5 +10,40 @@
     <p>Zip: {{ app.user.zip ? app.user.zip : 'null' }}</p>
     <p>Country: {{ app.user.country ? app.user.country : 'null' }}</p>
 
-    <a href="{{ path('profile-edit') }}">Edit</a>
+    <a href="{{ path('profile-edit') }}" role="button" class="btn btn-primary">Edit</a>
+
+    <h3>Orders:</h3>
+    {% if orders|length > 0 %}
+        {% for order in orders %}
+            <div class="panel {{ order.isCompleted ? 'panel-success' : 'panel-warning' }}">
+                <!-- Default panel contents -->
+                <div class="panel-heading clearfix vertical-middle"><p class="pull-left">{{ order.createdAt|date }}</p><p class="pull-right">&pound; {{ order.price }}</p></div>
+
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <td>Name</td>
+                        <td>Price</td>
+                        <td>Quantity</td>
+                        <td>Total</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for selection in order.selections %}
+                            <tr>
+                                <td>{{ selection.product.name }}</td>
+                                <td>&pound; {{ selection.price }}</td>
+                                <td>{{ selection.quantity }}</td>
+                                <td>&pound; {{ selection.price*selection.quantity }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endfor %}
+
+
+    {% else %}
+        No recent orders yet.
+    {% endif %}
 {% endblock %}

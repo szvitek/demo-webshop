@@ -91,3 +91,7 @@ footer {
 .table > tbody > tr > td {
     vertical-align: middle;
 }
+
+.vertical-middle {
+    vertical-align: middle;
+}

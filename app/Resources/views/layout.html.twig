@@ -1,5 +1,12 @@
 {% extends '::base.html.twig' %}
 
+{% block stylesheets %}
+    {{ parent() }}
+
+    <!-- Custom CSS -->
+    <link href="{{ asset('bundles/app/css/shop-homepage.css') }}" rel="stylesheet">
+{% endblock %}
+
 {% block navigation %}
     <!-- Navigation -->
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -23,15 +30,15 @@
                     <li>
                         <a href="#" data-toggle="modal" data-target="#modalCart"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> Cart <span class="badge">{{ app.session.get('cart')|length }}</span></a>
                     </li>
-                    {% if is_granted("IS_AUTHENTICATED_REMEMBERED")  %}
+                    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> {{ app.user.username }} <span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a href="{{ path("profile-show") }}">Profile</a>
+                                    <a href="{{ path("profile-show") }}"><span class="glyphicon glyphicon-user"></span> Profile</a>
                                 </li>
                                 <li>
-                                    <a href="{{ path('logout') }}" title="Good bye {{ app.user.username }}!">Logout</a>
+                                    <a href="{{ path('logout') }}" title="Good bye {{ app.user.username }}!"><span class="glyphicon glyphicon-log-out"></span> Logout</a>
                                 </li>
                             </ul>
                         </li>
@@ -40,13 +47,12 @@
                             <a href="{{ path("login") }}"><span class="glyphicon glyphicon-log-in"></span> Login</a>
                         </li>
                     {% endif %}
+                    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                        <li>
+                            <a href="{{ path("admin-index") }}"><span class="glyphicon glyphicon-list-alt"></span> Admin</a>
+                        </li>
+                    {% endif %}
                 </ul>
-                {#<div class="search pull-right">#}
-                {#<form class="navbar-form" role="search">#}
-                {#<input type="text" placeholder="Search" name="keyword">#}
-                {#<span class="glyphicon glyphicon-search" aria-hidden="true"></span>#}
-                {#</form>#}
-                {#</div>#}
 
                 <div class="col-md-3 form-group search">
                     <form class="navbar-form" action="{{ path('homepage') }}" method="get">
@@ -188,7 +194,7 @@
                 calculateTotal();
             });
 
-            //when close the modal...
+            //when close the modal
             $("#modal").on("hidden.bs.modal ", function () {
                 updateCart();
             });
