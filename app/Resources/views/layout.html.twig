@@ -47,9 +47,9 @@
                             <a href="{{ path("login") }}"><span class="glyphicon glyphicon-log-in"></span> Login</a>
                         </li>
                     {% endif %}
-                    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                    {% if is_granted("ROLE_ADMIN") %}
                         <li>
-                            <a href="{{ path("admin-index") }}"><span class="glyphicon glyphicon-list-alt"></span> Admin</a>
+                            <a href="{{ path("admin-index") }}"><span class="glyphicon glyphicon-cog"></span> Admin</a>
                         </li>
                     {% endif %}
                 </ul>

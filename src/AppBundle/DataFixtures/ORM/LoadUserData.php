@@ -36,6 +36,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface, C
         $admin->setEmail('admin@webshop.com');
         $password = $encoder->encodePassword($admin, 'adminpass');
         $admin->setPassword($password);
+        $admin->setRoles(array('ROLE_ADMIN'));
         $manager->persist($admin);
 
         $user = new User();

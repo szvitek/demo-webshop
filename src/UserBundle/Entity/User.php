@@ -54,6 +54,13 @@ class User implements AdvancedUserInterface, \Serializable
     private $email;
 
     /**
+     * @var array
+     *
+     * @ORM\Column(name="roles", type="json_array")
+     */
+    private $roles = array();
+
+    /**
      * @ORM\Column(name="is_active", type="boolean")
      */
     private $isActive;
@@ -126,7 +133,22 @@ class User implements AdvancedUserInterface, \Serializable
 
     public function getRoles()
     {
-        return array('ROLE_USER');
+        $roles = $this->roles;
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles)
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    public function addRole()
+    {
+        
     }
 
     public function eraseCredentials()
