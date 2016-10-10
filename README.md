@@ -44,4 +44,4 @@ Install guide step-by-step:
     php bin/console server:start
     ```
 
-Now the demo application is ready to use at your localhost you can see more details on the apllication's info page
+Now the demo application is ready to use at your localhost. You can see more details on the application's info page.
